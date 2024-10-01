@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ ebook.title }}</h1>
+    <p><strong>Author:</strong> {{ ebook.author }}</p>
+    <p><strong>Category:</strong> {{ ebook.category.name }}</p>
+    <p><strong>Uploaded on:</strong> {{ ebook.uploaded_at|date:"F j, Y" }}</p>
+
+    <div class="button-group">
+        <a href="{% url 'download_ebook' ebook.id %}" class="btn btn-download">Download</a>
+        <a href="{% url 'edit_ebook' ebook.id %}" class="btn btn-edit">Edit</a>
+        <a href="{% url 'manage_library' %}" class="btn btn-back">Back to Library</a>
+    </div>
+</div>
+{% endblock %}

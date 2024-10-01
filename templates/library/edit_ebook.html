@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load custom_filters %}  <!-- Load your custom filters here -->
+
+{% block content %}
+<div class="container">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 2em; margin-bottom: 1em;">Edit E-Book: {{ ebook.title }}</h2>
+    
+    <form method="POST" style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 20px;">
+            {% for field in form %}
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">{{ field.label }}</label>
+                    {{ field|add_class:"form-control" }} <!-- Ensure this is defined in your custom filters -->
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="button-group" style="display: flex; justify-content: space-between;">
+            <button type="submit" style="padding: 10px 20px; font-size: 1rem; color: #fff; background-color: #007bff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+                Save Changes
+            </button>
+            <a href="{% url 'manage_library' %}" style="padding: 10px 20px; font-size: 1rem; color: #007bff; border: 2px solid #007bff; border-radius: 5px; text-decoration: none; transition: background-color 0.3s; background-color: #e7f1ff;">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-control {
+        width: 100%;  /* Make fields full width */
+        padding: 10px;  /* Add padding for comfort */
+        border: 1px solid #ccc;  /* Border for a clean look */
+        border-radius: 5px;  /* Rounded corners */
+        box-sizing: border-box;  /* Include padding and border in the element's total width and height */
+        font-size: 1rem;  /* Base font size */
+        transition: border-color 0.3s;  /* Smooth transition for focus */
+    }
+    
+    .form-control:focus {
+        border-color: #007bff;  /* Change border color on focus */
+        outline: none;  /* Remove default outline */
+    }
+</style>
+{% endblock %}

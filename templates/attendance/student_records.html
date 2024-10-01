@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Students Checked In on {{ today }}</h2>
+    
+    <ul>
+        {% for record in checked_in_students %}
+            <li>
+                {{ record.user.username }} - Checked in at {{ record.clock_in_time }}
+            </li>
+        {% empty %}
+            <li>No students are checked in today.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

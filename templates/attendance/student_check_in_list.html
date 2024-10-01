@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Student Check-In List</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Clocked In</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+                <tr>
+                    <td>{{ student.username }}</td>
+                    <td>{% if student.clockedin %}Yes{% else %}No{% endif %}</td>
+                    <td>
+                        {% if not student.clockedin %}
+                        <a href="{% url 'attendance:teacher_check_in_student' student_id=student.id %}">
+                            <button type="button">Check In</button>
+                        </a>
+                                                {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if ebooks %}
+        <ul>
+            {% for ebook in ebooks %}
+                <li>{{ ebook.title }} by {{ ebook.author }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No e-books found in this category.</p>
+    {% endif %}
+{% endblock %}
