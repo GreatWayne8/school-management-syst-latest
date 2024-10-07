@@ -1,0 +1,12 @@
+<!-- templates/medicals/add_medical_record.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Add Medical Record</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+  <a href="{% url 'medicals:medical_record_list' %}">Back to Medical Records</a>
+{% endblock %}

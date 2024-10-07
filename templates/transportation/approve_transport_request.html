@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Approve Transport Request</h2>
+    <p>Student: {{ request.student }}</p>
+    <p>Pickup Time: {{ request.pickup_time }}</p>
+    <p>Dropoff Time: {{ request.dropoff_time }}</p>
+    <p>Pickup Location: {{ request.pickup_location }}</p>
+    <p>Dropoff Location: {{ request.dropoff_location }}</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+        <button type="submit" name="action" value="decline" class="btn btn-danger">Decline</button>
+    </form>
+</div>
+{% endblock %}

@@ -67,7 +67,7 @@ PROJECT_APPS = [
     "transportation.apps.TransportationConfig",
     "fees.apps.FeesConfig",
     "messaging.apps.MessagingConfig",
-    "health_wellness.apps.HealthWellnessConfig",
+    "medicals.apps.MedicalsConfig",
     "library.apps.LibraryConfig",
 ]
 

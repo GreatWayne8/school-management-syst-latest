@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Bus, Route, StudentPickup
-from .forms import BusForm, RouteForm, StudentPickupForm
-from .models import TransportRequest
-from .forms import TransportRequestForm
+from .models import Bus, Route, StudentPickup, TransportRequest  # Import TransportRequest model
+from .forms import BusForm, RouteForm, StudentPickupForm, TransportRequestForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 def bus_list(request):
     buses = Bus.objects.all()
@@ -21,8 +21,8 @@ def route_detail(request, pk):
     return render(request, 'transportation/route_detail.html', {'route': route})
 
 def student_pickup_list(request):
-    pickups = StudentPickup.objects.all()
-    return render(request, 'transportation/student_pickup_list.html', {'pickups': pickups})
+    pickups = StudentPickup.objects.all()  
+    return render(request, 'transportation/student_pickup_list.html', {'student_pickups': pickups})
 
 def student_pickup_detail(request, pk):
     pickup = get_object_or_404(StudentPickup, pk=pk)
@@ -33,6 +33,7 @@ def create_bus(request):
         form = BusForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Bus created successfully.')
             return redirect('transportation:bus_list')
     else:
         form = BusForm()
@@ -43,18 +44,39 @@ def create_route(request):
         form = RouteForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Route created successfully.')
             return redirect('transportation:route_list')  # Redirect to the list view after successful creation
     else:
         form = RouteForm()
     
     return render(request, 'transportation/create_route.html', {'form': form})
 
+@login_required
+def approve_transport_request(request, pk):
+    transport_request = get_object_or_404(TransportRequest, pk=pk)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'approve':
+            transport_request.approved = True
+            transport_request.status = 'approved'
+            messages.success(request, 'Transport request approved successfully.')
+        elif action == 'decline':
+            transport_request.approved = False
+            transport_request.status = 'declined'
+            messages.success(request, 'Transport request declined successfully.')
+
+        transport_request.save()
+        return redirect('transportation:transport_list')
+
+    return render(request, 'transportation/approve_transport_request.html', {'request': transport_request})
 
 def create_student_pickup(request):
     if request.method == 'POST':
         form = StudentPickupForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Student pickup created successfully.')
             return redirect('transportation:student_pickup_list')
     else:
         form = StudentPickupForm()
@@ -65,7 +87,8 @@ def create_transport_request(request):
         form = TransportRequestForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('transport_list')
+            messages.success(request, 'Transport request created successfully.')
+            return redirect('transportation:transport_list')
     else:
         form = TransportRequestForm()
     return render(request, 'transportation/create_transport_request.html', {'form': form})

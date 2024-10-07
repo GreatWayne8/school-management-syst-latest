@@ -4,26 +4,23 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Student Pickup List</h2>
-    <div class="card">
-        <div class="card-header">
-            <h5 class="card-title">List of Student Pickups</h5>
-        </div>
+    <h2 class="mb-4 text-center">Student Pickup List</h2>
+    <div class="card shadow-sm">
         <div class="card-body">
             <ul class="list-group">
                 {% for pickup in student_pickups %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ pickup.student }}</strong><br>
-                        <small>Route: {{ pickup.route }}</small><br>
-                        <small>Pickup Location: {{ pickup.pickup_location }}</small><br>
-                        <small>Drop-off Location: {{ pickup.dropoff_location }}</small><br>
-                        <small>Bus: {{ pickup.bus }}</small>
+                <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                    <div class="ms-2 me-auto">
+                        <h5 class="fw-bold mb-1">{{ pickup.student }}</h5>
+                        <p class="mb-1"><i class="bi bi-arrow-right-circle"></i> Route: <strong>{{ pickup.route }}</strong></p>
+                        <p class="mb-1"><i class="bi bi-geo-alt"></i> Pickup Location: {{ pickup.pickup_location }}</p>
+                        <p class="mb-1"><i class="bi bi-geo"></i> Drop-off Location: {{ pickup.dropoff_location }}</p>
+                        <p class="mb-1"><i class="bi bi-bus-front"></i> Bus: {{ pickup.bus }}</p>
                     </div>
-                    <span class="badge bg-success rounded-pill">Pickup Time: {{ pickup.pickup_time }}</span>
+                    <span class="badge bg-primary rounded-pill align-self-center">Pickup</span>
                 </li>
                 {% empty %}
-                <li class="list-group-item">No student pickups available.</li>
+                <li class="list-group-item text-center">No student pickups available.</li>
                 {% endfor %}
             </ul>
         </div>

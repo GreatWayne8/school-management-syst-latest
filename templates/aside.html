@@ -294,53 +294,53 @@
                     <a href="{% url 'transportation:bus_list' %}"><i class="fas fa-bus"></i> Buses</a>
                 </li>
                 <li class="{% if request.path == '/transportation/routes/create/' %}active{% endif %}">
-                    <a href="{% url 'transportation:create_route' %}"><i class="fas fa-plus-circle"></i> Create
-                        Route</a>
+                    <a href="{% url 'transportation:create_route' %}"><i class="fas fa-plus-circle"></i> Create Route</a>
                 </li>
                 <li class="{% if request.path == '/transportation/routes/' %}active{% endif %}">
                     <a href="{% url 'transportation:route_list' %}"><i class="fas fa-route"></i> Routes</a>
                 </li>
                 <li class="{% if request.path == '/transportation/student-pickups/create/' %}active{% endif %}">
-                    <a href="{% url 'transportation:create_student_pickup' %}"><i class="fas fa-user-plus"></i> Create
-                        Student Pickup</a>
+                    <a href="{% url 'transportation:create_student_pickup' %}"><i class="fas fa-user-plus"></i> Create Student Pickup</a>
                 </li>
                 <li class="{% if request.path == '/transportation/transport/list/' %}active{% endif %}">
-                    <a href="{% url 'transportation:transport_list' %}"><i class="fas fa-list"></i> Transport
-                        Requests</a>
+                    <a href="{% url 'transportation:transport_list' %}"><i class="fas fa-list"></i> Transport Requests</a>
                 </li>
+            
+                <!-- Student Pickups (Single Instance) -->
+                {% if request.user.is_superuser or request.user.is_student %}
+                <li class="{% if request.path == '/transportation/student-pickups/' %}active{% endif %}">
+                    <a href="{% url 'transportation:student_pickup_list' %}"><i class="fas fa-user"></i> Student Pickups</a>
+                </li>
+                {% endif %}
             </ul>
             {% endif %}
-
-            <!-- Student Pickups (Single Instance) -->
-            <li class="{% if request.path == '/transportation/student-pickups/' %}active{% endif %}">
-                <a href="{% url 'transportation:student_pickup_list' %}"><i class="fas fa-user"></i> Student Pickups</a>
-            </li>
-
+            
             <!-- Student-Specific Links -->
             {% if request.user.is_student %}
             <li class="{% if request.path == '/transportation/transport/create/' %}active{% endif %}">
-                <a href="{% url 'transportation:create_transport_request' %}"><i class="fas fa-truck"></i> Create
-                    Transport Request</a>
+                <a href="{% url 'transportation:create_transport_request' %}"><i class="fas fa-truck"></i> Create Transport Request</a>
             </li>
             {% endif %}
-            <br />
             <p class="ml-3" data-bs-toggle="collapse" data-bs-target="#healthMenu" aria-expanded="false"
                 aria-controls="healthMenu" style="cursor: pointer;">
                 <i class="fas fa-heartbeat"></i> Health
             </p>
             <ul id="healthMenu" class="collapse">
                 <li>
-                    <a href="{% url 'medical_record_list' %}">
+                    <a href="{% url 'medicals:medical_record_list' %}">
                         <i class="fas fa-file-medical"></i> Medical Records
                     </a>
                 </li>
+
+                <!-- Admins can add medical records -->
+                {% if request.user.is_superuser %}
                 <li>
-                    <a href="{% url 'wellness_program_list' %}">
-                        <i class="fas fa-heart"></i> Wellness Programs
+                    <a href="{% url 'medicals:add_medical_record' %}">
+                        <i class="fas fa-plus"></i> Add Medical Record
                     </a>
                 </li>
+                {% endif %}
             </ul>
-
             <br />
             <p class="ml-3" data-bs-toggle="collapse" data-bs-target="#othersMenu" aria-expanded="false"
                 aria-controls="othersMenu" style="cursor: pointer;">

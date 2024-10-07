@@ -41,14 +41,23 @@ class TransportRequest(models.Model):
         ('both', 'Both Pickup and Drop-off'),
     ]
     
+    REQUEST_STATUS = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('declined', 'Declined'),
+    ]
+
     student = models.ForeignKey('accounts.Student', on_delete=models.CASCADE)
     transport_type = models.CharField(max_length=20, choices=TRANSPORT_CHOICES)
     pickup_time = models.DateTimeField(blank=True, null=True)
     pickup_location = models.CharField(max_length=255, blank=True, null=True)
     dropoff_time = models.DateTimeField(blank=True, null=True)
     dropoff_location = models.CharField(max_length=255, blank=True, null=True)
-    status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('completed', 'Completed')], default='pending')
+    status = models.CharField(max_length=20, choices=REQUEST_STATUS, default='pending')
     notes = models.TextField(blank=True, null=True)
+    approved = models.BooleanField(default=False)
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)  # Assuming the user with id=1 is a valid default.
 
     def __str__(self):
-        return f"Transport Request for {self.student} - {self.get_transport_type_display()}"
+        return f"{self.student} - {self.transport_type} - {self.status}"

@@ -38,6 +38,13 @@ class StudentPickupForm(forms.ModelForm):
     class Meta:
         model = StudentPickup
         fields = ['student', 'pickup_location', 'dropoff_location', 'route', 'bus']
+        widgets = {
+            'student': forms.Select(attrs={'class': 'form-control'}),
+            'pickup_location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Pickup Location'}),
+            'dropoff_location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Dropoff Location'}),
+            'route': forms.Select(attrs={'class': 'form-control'}),
+            'bus': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 class TransportRequestForm(forms.ModelForm):
     class Meta:
@@ -62,3 +69,5 @@ class TransportRequestForm(forms.ModelForm):
             self.add_error('dropoff_time', 'Drop-off time is required for drop-off or both transport types.')
 
         return cleaned_data
+
+

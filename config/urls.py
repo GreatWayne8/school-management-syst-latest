@@ -22,7 +22,8 @@ urlpatterns = [
     path("payments/", include("payments.urls")),
     path('fees/', include('fees.urls')), 
     path('messaging/', include('messaging.urls')),
-    path('health_wellness/', include('health_wellness.urls')),
+    path('medicals/', include('medicals.urls', namespace='medicals')),
+
     path('library/', include('library.urls')),
 
 

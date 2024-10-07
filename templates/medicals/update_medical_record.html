@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Edit Medical Record</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Render form fields here -->
+        <button type="submit" class="btn btn-primary">Update Record</button>
+        <a href="{% url 'medicals:medical_record_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
