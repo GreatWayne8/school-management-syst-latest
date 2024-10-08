@@ -1,15 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Students Checked In on {{ today }}</h2>
-    
-    <ul>
+<h2>Checked In Students for {{ today }}</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Level</th> <!-- Add level header -->
+            <th>Clock In Time</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for record in checked_in_students %}
-            <li>
-                {{ record.user.username }} - Checked in at {{ record.clock_in_time }}
-            </li>
-        {% empty %}
-            <li>No students are checked in today.</li>
+        <tr>
+            <td>{{ record.user.username }}</td>
+            <td>{{ record.user.student.level }}</td> <!-- Display the student's level -->
+            <td>{{ record.clock_in_time }}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </tbody>
+</table>
 {% endblock %}

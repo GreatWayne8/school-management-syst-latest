@@ -256,15 +256,6 @@
                 <li class="{% if request.path == '/attendance/records/' %}active{% endif %}">
                     <a href="{% url 'attendance:clock_in_out_records' %}"><i class="fas fa-history"></i> All Clock
                         In/Out Records</a>
-                </li>
-                <li class="{% if request.path == '/attendance/teacher_records/' %}active{% endif %}">
-                    <a href="{% url 'attendance:teacher_records' %}"><i class="fas fa-history"></i> Teacher Clock In/Out
-                        Records</a>
-                </li>
-                <li class="{% if request.path == '/attendance/student_records/' %}active{% endif %}">
-                    <a href="{% url 'attendance:student_records' %}"><i class="fas fa-history"></i> Student Clock In/Out
-                        Records</a>
-                </li>
                 {% endif %}
 
                 {% if request.user.is_teacher %}

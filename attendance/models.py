@@ -4,7 +4,8 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 class ClockInOut(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # The student being checked in
+    teacher = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='teacher_checkins', null=True, blank=True)  # The teacher checking in the student
     clock_in_time = models.DateTimeField(null=True, blank=True)
     clock_out_time = models.DateTimeField(null=True, blank=True)
     date = models.DateField(default=timezone.now)
@@ -17,7 +18,7 @@ class ClockInOut(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.user} - {self.date}"
+        return f"{self.user} - {self.date} by {self.teacher}"  
 
     @property
     def is_clocked_in(self):
@@ -37,4 +38,3 @@ class ClockInOut(models.Model):
         if self.clock_in_time and self.clock_out_time and self.clock_out_time < self.clock_in_time:
             raise ValidationError("Clock-out time cannot be earlier than clock-in time")
         super().clean()
-

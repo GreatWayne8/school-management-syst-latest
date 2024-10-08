@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Clock In{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Clock In</h2>
+
+        <form method="POST" action="{% url 'clock_in' %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="user_id">Select User (Student/Teacher)</label>
+                <select id="user_id" name="user_id" class="form-control" required>
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Clock In</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

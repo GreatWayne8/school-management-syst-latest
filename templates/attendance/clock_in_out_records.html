@@ -1,31 +1,67 @@
 {% extends 'base.html' %}
 
-{% block title %}Clock In/Out Records{% endblock title %}
+{% block title %}All Clock In/Out Records{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <h2>Clock In/Out Records</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Date</th>
-                    <th>Clock In</th>
-                    <th>Clock Out</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for record in records %}
-                <tr>
-                    <td>{{ record.user.username }}</td>
-                    <td>{{ record.date }}</td>
-                    <td>{{ record.clock_in_time }}</td>
-                    <td>{{ record.clock_out_time|default:"Not clocked out" }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="container mt-5">
+    <h2 class="text-center mb-5" style="font-weight: bold;">All Clock In/Out Records</h2>
+
+    <!-- Teacher Clock In/Out Section -->
+    <div class="section mb-5">
+        <h3 class="section-title" style="font-weight: bold; font-size: 24px;">Teacher Clock In/Out Records</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr class="text-center">
+                        <th>Teacher Name</th>
+                        <th>Clock In Time</th>
+                        <th>Clock Out Time</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for checkin in teacher_checkins %}
+                    <tr class="text-center">
+                        <td>{{ checkin.user.get_full_name }}</td>
+                        <td>{{ checkin.clock_in_time }}</td>
+                        <td>{{ checkin.clock_out_time|default:"N/A" }}</td>
+                        <td>{{ checkin.date }}</td>
+                        <td>{{ checkin.duration|default:"N/A" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Student Clock In/Out Section -->
+    <div class="section">
+        <h3 class="section-title" style="font-weight: bold; font-size: 24px;">Student Clock In/Out Records</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr class="text-center">
+                        <th>Student Name</th>
+                        <th>Clock In Time</th>
+                        <th>Clock Out Time</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for checkin in student_checkins %}
+                    <tr class="text-center">
+                        <td>{{ checkin.user.get_full_name }}</td>
+                        <td>{{ checkin.clock_in_time }}</td>
+                        <td>{{ checkin.clock_out_time|default:"N/A" }}</td>
+                        <td>{{ checkin.date }}</td>
+                        <td>{{ checkin.duration|default:"N/A" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock %}

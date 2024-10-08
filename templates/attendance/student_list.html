@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Student List</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Level</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.username }}</td>
+            <td>{{ student.student.level }}</td> <!-- Display the student's level -->
+            <td>
+                <a href="{% url 'attendance:teacher_check_in_student' student.id %}">Check In</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

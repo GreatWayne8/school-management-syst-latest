@@ -93,6 +93,20 @@ class ClockInOutRecordsView(ListView):
             return ClockInOut.objects.all()  # Admin view all records
         return ClockInOut.objects.none()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Filter teacher records
+        teacher_checkins = ClockInOut.objects.filter(user__is_teacher=True)
+        
+        # Filter student records
+        student_checkins = ClockInOut.objects.filter(user__is_student=True)
+        
+        # Add to context for the template
+        context['teacher_checkins'] = teacher_checkins
+        context['student_checkins'] = student_checkins
+        return context
+
 class TeacherClockInOutRecordsView(ListView):
     model = ClockInOut
     template_name = 'attendance/teacher_records.html'
@@ -119,21 +133,16 @@ def teacher_check_in_student(request, student_id):
     student = get_object_or_404(User, id=student_id, is_student=True)
     today = timezone.now().date()
 
-    print(f"Student fetched: {student.username} (ID: {student.id})")
-
     existing_check_in = ClockInOut.objects.filter(user=student, date=today, clock_out_time__isnull=True).exists()
-
-    print(f"Existing check-in status: {existing_check_in}")
 
     if existing_check_in:
         messages.error(request, f"{student.username} is already checked in for today.")
         return redirect('attendance:clock_status')
 
     if request.method == "POST":
-        print("Form submitted!")
-
         ClockInOut.objects.create(
             user=student,
+            teacher=request.user,  # Record the teacher checking in the student
             date=today,
             clock_in_time=timezone.now()
         )
