@@ -26,8 +26,10 @@ class MedicalRecordForm(forms.ModelForm):
         elif user.is_teacher:  # Teacher role
             self.fields['student'].queryset = Student.objects.filter(teacher__user=user)  # Teacher sees only their students
         elif user.is_parent:  # Parent role
-            # Assuming there's a reverse relation from Student to Parent
             self.fields['student'].queryset = Student.objects.filter(parents__user=user)  # Parent sees their own children
         else:
-            # Optionally, you can raise an error or set queryset to an empty list for unauthorized roles
             self.fields['student'].queryset = Student.objects.none()  # No access for other roles
+
+        # Add a CSS class to each field
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control'})

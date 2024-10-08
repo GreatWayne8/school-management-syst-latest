@@ -2,11 +2,56 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Add Medical Record</h2>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
-  <a href="{% url 'medicals:medical_record_list' %}">Back to Medical Records</a>
+  <div style="max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Add Medical Record</h2>
+    <form method="POST">
+      {% csrf_token %}
+
+      <div style="margin-bottom: 15px;">
+        {{ form.student.label }}
+        {{ form.student }}
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        {{ form.record_date.label }}
+        {{ form.record_date }}
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        {{ form.condition.label }}
+        {{ form.condition }}
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        {{ form.treatment.label }}
+        {{ form.treatment }}
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        {{ form.notes.label }}
+        {{ form.notes }}
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        {{ form.doctor.label }}
+        {{ form.doctor }}
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        {{ form.doctors_phone_number.label }}
+        {{ form.doctors_phone_number }}
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        {{ form.hospital.label }}
+        {{ form.hospital }}
+      </div>
+
+      <button type="submit" style="width: 100%; background-color: #3498db; color: white; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 20px;">Save</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="{% url 'medicals:medical_record_list' %}" style="color: #3498db; text-decoration: none; font-weight: bold;">Back to Medical Records</a>
+    </div>
+  </div>
 {% endblock %}

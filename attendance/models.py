@@ -4,8 +4,8 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 class ClockInOut(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # The student being checked in
-    teacher = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='teacher_checkins', null=True, blank=True)  # The teacher checking in the student
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  
+    teacher = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='teacher_checkins', null=True, blank=True)  
     clock_in_time = models.DateTimeField(null=True, blank=True)
     clock_out_time = models.DateTimeField(null=True, blank=True)
     date = models.DateField(default=timezone.now)
