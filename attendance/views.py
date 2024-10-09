@@ -1,29 +1,49 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib import messages
-from .models import ClockInOut
+from .models import ClockInOut, School
+from django.contrib.gis.geos import Point  # Import Point for geofencing
+from .utils import is_user_clocked_in  # Import utility function
 from django.views.generic import ListView
 from django.contrib.auth import get_user_model
+from .utils import is_user_clocked_in  # Import utility function
 
 User = get_user_model()
 
 @login_required
 def clock_in(request):
     today = timezone.now().date()
+    # Create or get the ClockInOut record for today
     clock_in_record, created = ClockInOut.objects.get_or_create(user=request.user, date=today)
-    
+
     if request.method == "POST":
+        # Get user's location from the POST request
+        user_location = request.POST.get('user_location')  # This should be a JSON string
+        
+        if user_location:
+            # Assuming user_location is a JSON string, parse it
+            user_location = json.loads(user_location)  # Use json library to parse
+            user_point = Point(float(user_location['lng']), float(user_location['lat']))
+
+            # Check if the user's location is within any school's geofence
+            if not School.objects.filter(location__distance_lte=(user_point, D(m=clock_in_record.school.radius))).exists():
+                messages.error(request, "You are not within the geofenced area to clock in.")
+                return redirect('attendance:clock_status')
+
+        # Check if the user has already clocked in
         if clock_in_record.clock_in_time:
             messages.error(request, "You have already clocked in today.")
         else:
-            clock_in_record.clock_in_time = timezone.now()
-            clock_in_record.save()
+            clock_in_record.clock_in_time = timezone.now()  # Set the clock-in time
+            clock_in_record.save()  # Save the record
             messages.success(request, "You have successfully clocked in.")
-        
+
         return redirect('attendance:clock_status')
-    
+
     return render(request, 'attendance/clock_in.html', {'clock_in_record': clock_in_record})
+
 
 @login_required
 def clock_out(request):
@@ -60,7 +80,8 @@ def clock_status(request):
     context = {
         'clock_record': clock_record,
         'today': today,
-        'students': students  # Add students to context
+        'students': students,
+        'is_clocked_in': is_user_clocked_in(request.user),  # Check if user is clocked in
     }
 
     return render(request, 'attendance/clock_status.html', context)
@@ -68,20 +89,15 @@ def clock_status(request):
 @login_required
 def student_check_in_list(request):
     today = timezone.now().date()
-
-    # Fetch students from the database with is_student=True
     students = User.objects.filter(is_student=True)
-    if not students.exists():
-        print("No students found!")
 
     for student in students:
-        student.clockedin = ClockInOut.objects.filter(user=student, date=today, clock_out_time__isnull=True).exists()
+        student.clockedin = is_user_clocked_in(student)  # Use the utility function
 
     return render(request, 'attendance/student_check_in_list.html', {
         'students': students,
         'today': today,
     })
-
 
 class ClockInOutRecordsView(ListView):
     model = ClockInOut

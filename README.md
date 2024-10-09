@@ -4,7 +4,6 @@ Feature-rich Tri Collab. You may want to build a Tri Collab(AKA school managemen
 
 Let's enhance the project by contributing! 👩‍💻👩‍💻
 
-![Screenshot from 2023-12-31 17-36-31](https://github.com/adilmohak/django-lms/assets/60693922/e7fb628a-6275-4160-ae0f-ab27099ab3ca)
 
 ## Current features
 
@@ -39,7 +38,11 @@ Let's enhance the project by contributing! 👩‍💻👩‍💻
 - Custom message displayed for those that pass or fail a quiz
 - Custom permission (view_sittings) added, allowing users with that permission to view quiz results from users
 - A marking page which lists completed quizzes, can be filtered by quiz or user, and is used to mark essay questions
-
+- Attendance App -teachers clock in/out-Geo fencing 
+- Students being signed in by teacher
+- Medicals application - medical records of students
+- Transportation application
+- Library application
 # Quick note for future contributors
 
 If you would like to contribute, simply begin by implementing one from the list in the `TODO.md` file.

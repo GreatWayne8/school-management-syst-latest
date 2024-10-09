@@ -44,6 +44,7 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.gis',
 ]
 
 # Third party apps
@@ -69,6 +70,7 @@ PROJECT_APPS = [
     "messaging.apps.MessagingConfig",
     "medicals.apps.MedicalsConfig",
     "library.apps.LibraryConfig",
+    
 ]
 
 
@@ -140,12 +142,12 @@ ASGI_APPLICATION = "config.asgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'new_db_elimu',
         'USER': 'new_db_user',
         'PASSWORD': 'new_password',
-        'HOST': 'localhost',  # or your database host
-        'PORT': '5432',       # or your database port
+        'HOST': 'localhost',  
+        'PORT': '5432',
     }
 }
 

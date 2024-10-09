@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Clock Out{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Clock Out</h2>
+
+        <form id="clockOutForm" method="POST" action="{% url 'clock_out' %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="user_id">Select User (Student/Teacher)</label>
+                <select id="user_id" name="user_id" class="form-control" required>
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Clock Out</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('clockOutForm').addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent default form submission
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            // Prepare the data to send
+            const formData = new FormData();
+            formData.append('user_id', document.getElementById('user_id').value);
+            formData.append('user_location', JSON.stringify(userLocation));
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}'); // Add CSRF token
+
+            // Sending user location with the POST request to clock_out view
+            fetch('/attendance/clock_out/', {
+                method: 'POST',
+                body: formData  // Send form data
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response
+                if (data.success) {
+                    // Redirect or show success message
+                    window.location.href = '/attendance/clock_status/';  // Redirect to clock status
+                } else {
+                    alert(data.message);  // Show error message
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while clocking out.');
+            });
+        }, function(error) {
+            console.error('Geolocation error:', error);
+            alert('Unable to retrieve your location.');
+        });
+    });
+</script>
+
+{% endblock content %}

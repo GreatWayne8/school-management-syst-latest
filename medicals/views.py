@@ -18,13 +18,29 @@ def add_medical_record(request):
 
 def medical_record_list(request):
     if request.user.is_superuser:
+        # Admin should see all medical records
         medical_records = MedicalRecord.objects.all()
     elif request.user.is_teacher:
-        medical_records = MedicalRecord.objects.filter(student__teacher__user=request.user)
+        # Teachers can see all students' medical records since there's no direct student-teacher link
+        # or you can customize this to filter based on a class/subject relationship if it exists
+        medical_records = MedicalRecord.objects.all()
+        
+        # If you have classes or subjects where teachers are linked to students, you can filter based on that.
+        # Example (if you have a class or group concept):
+        # teacher = request.user.teacher  # Assuming Teacher is linked to the user
+        # medical_records = MedicalRecord.objects.filter(student__class__teacher=teacher)
+    
     elif request.user.is_parent:
-        medical_records = MedicalRecord.objects.filter(student__parents__user=request.user)
+        # Parents should only see their children's medical records
+        try:
+            parent = request.user.parent  # Assuming Parent model has a OneToOne relationship with User
+            medical_records = MedicalRecord.objects.filter(student__parents=parent)
+        except AttributeError:
+            medical_records = MedicalRecord.objects.none()  # No records for users not linked as parents
+    
     else:
-        medical_records = MedicalRecord.objects.none()  # No access for other roles
+        # No access for other roles
+        medical_records = MedicalRecord.objects.none()
 
     return render(request, 'medicals/medical_record_list.html', {'medical_records': medical_records})
 

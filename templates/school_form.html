@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Define School Location</h2>
+
+    <div id="map" style="height: 400px;"></div>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
+        <button type="submit" class="btn btn-primary">Save Location</button>
+    </form>
+
+    <script type="text/javascript">
+        var map = L.map('map').setView([0, 0], 2); // Initialize map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Handle map click to get lat/lng
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+
+            L.marker([lat, lng]).addTo(map).bindPopup('School Location').openPopup();
+        });
+    </script>
+{% endblock %}

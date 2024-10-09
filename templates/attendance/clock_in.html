@@ -7,7 +7,7 @@
     <div class="col-12">
         <h2>Clock In</h2>
 
-        <form method="POST" action="{% url 'clock_in' %}">
+        <form id="clockInForm" method="POST" action="{% url 'clock_in' %}">
             {% csrf_token %}
             
             <div class="form-group">
@@ -23,4 +23,39 @@
         </form>
     </div>
 </div>
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var userLocation = JSON.stringify({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+                
+                // Send userLocation to your Django view for processing
+                fetch('/attendance/clock-in/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'  // Make sure to include the CSRF token
+                    },
+                    body: userLocation
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response from the server
+                    alert(data.message);  // Show success or error message
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }, function() {
+                alert("Geolocation is not enabled or permission denied.");
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+    </script>
+    
 {% endblock content %}
